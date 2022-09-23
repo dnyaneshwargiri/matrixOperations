@@ -9,15 +9,22 @@ if(process.argv.length<3) throw new Error('No input file provided')
 stream.pipe(process.stdout);
 let inputFile="/"+process.argv[2]
 
+function getPossibleMatrixDimensions(){
+
+}
+
 function verifyMatrix(matrixList){
-	//square matrix
+	let n=m=0
+	let isValid=false;
 	let length=matrixList.length;
- 	return length > 0 && Math.sqrt(length) % 1 === 0;
-	//rectangular matrix
+	//square matrix 
+	isValid=length > 0 && Math.sqrt(length) % 1 === 0;
+	n=m=Math.sqrt(length);
+	//rectangular matrix= not required as per documnetation
+	return [isValid,n,m]
 } 
 
-function formMatrix(list){
-	let n=m=Math.sqrt(list.length);
+function formMatrix(list,n,m){
 	let matrix=[]
 	for(let i=0;i<n;i++){
 	  matrix[i]=list.slice(i*m,i*m+m)
@@ -35,19 +42,15 @@ function formList(matrix,n,m){
 	return tempList
 }
 
-function rotateMatrixEdges(list){
-	let matrix=formMatrix(list)
-	let k=1 //rotate by 1 clockwise
+function rotateMatrixEdges(list,n,m){
 	//n = rows
 	//m = columns
-	let n= matrix.length
-	let m= matrix[0].length
+	let matrix=formMatrix(list,n,m)
+	let k=1
     let top=0, bottom=n-1,left=0,right=m-1;
     // Rotate while the ring exists.
     while(top<=bottom){
-        // To hold the ring elements.
         let elements=[];
-        // Do the spiral traversal and store the ring elements.
         for(let i=left;i<=right;i++){
             elements.push(matrix[top][i]);
         }
@@ -60,13 +63,10 @@ function rotateMatrixEdges(list){
         for(let i=bottom-1;i>top;i--){
             elements.push(matrix[i][left]);
         }
-        // Check if the ring size is less than or equal to k
-        // If true, break as the rings after will also be smaller than k.
         if(elements.length<=k){
             break;
         }
         // Rotation starts.
-        // index represents the index of the position that should be at the start of the ring.
         let size=elements.length;
         let index=size-k;
         // Store the rotated ring.
@@ -86,31 +86,28 @@ function rotateMatrixEdges(list){
             matrix[i][left]=elements[index];
             index++; index%=size;
         }
-        // Update the rotation parameters.
         top++; bottom--;
         left++; right--;
     }
-
 	return formList(matrix,n,m)
 }
 
 function getRotatedTable(list,id){
 	list=JSON.parse(list)
-	return verifyMatrix(list) ? [id,'['+rotateMatrixEdges(list)+']',true] : [id,"[]",false]
+	let isValid=verifyMatrix(list)[0]
+	let n=verifyMatrix(list)[1]
+	let m=verifyMatrix(list)[2] 
+	return isValid ? [id,'['+rotateMatrixEdges(list,n,m)+']',true] : [id,"[]",false]
 }
 
-const csvParser = parse.parse({columns: true}, function (err, records) {
-})
-
+const csvParser = parse.parse({columns: true})
 stream.write(['id','json','is_valid'])
-//process stream one row at time
 fs.createReadStream(__dirname+inputFile).pipe(csvParser).on('data', (element) => {
-	//rotate each table
 	stream.write(getRotatedTable(element.json,Number(element.id)))
 }).on("end",function(){	
 	stream.end();
 }).on('error', err => {
-	console.error(err)
+	throw new Error(err)
 });
 
 
