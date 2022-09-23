@@ -19,7 +19,7 @@ function verifyMatrix(matrixList){
 	let length=matrixList.length;
 	//square matrix 
 	isValid=length > 0 && Math.sqrt(length) % 1 === 0;
-	n=m=Math.sqrt(length);
+	isValid? n=m=Math.sqrt(length): n=m=0;
 	//rectangular matrix= not required as per documnetation
 	return [isValid,n,m]
 } 
@@ -110,5 +110,11 @@ fs.createReadStream(__dirname+inputFile).pipe(csvParser).on('data', (element) =>
 	throw new Error(err)
 });
 
-
+module.exports={
+	verifyMatrix,
+	formMatrix,
+	formList,
+	rotateMatrixEdges,
+	getRotatedTable
+}
 
