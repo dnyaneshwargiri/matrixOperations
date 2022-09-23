@@ -8,13 +8,19 @@ let outputFile="/"+process.argv[3]
 
 
 function verifyMatrix(matrixList){
-	let length=JSON.parse(matrixList).length;
+	let length=matrixList.length;
  	return length > 0 && Math.sqrt(length) % 1 === 0;
 } 
 
 function formMatrix(list){
-	return []
+	let n=m=Math.sqrt(list.length);
+	let matrix=[]
+	for(let i=0;i<n;i++){
+	  matrix[i]=list.slice(i*m,i*m+m)
+	}	
+	return matrix
 }
+
 function formList(matrix,n,m){
 	let tempList=[]
 	for(let i=0;i<n;i++){
@@ -22,7 +28,9 @@ function formList(matrix,n,m){
             tempList.push(matrix[i][j])
         }
     }
+	return tempList
 }
+
 function rotateMatrixEdges(list){
 	let matrix=formMatrix(list)
 	let k=1 //rotate by 1
@@ -59,7 +67,7 @@ function rotateMatrixEdges(list){
         }
         // Rotation starts.
         // ind represents the index of the position that should be at the start of the ring.
-        let sz=elems.size();
+        let sz=elems.length;
         let ind=sz-k;
         // Store the rotated ring.
         for(let i=left;i<=right;i++){
@@ -82,9 +90,10 @@ function rotateMatrixEdges(list){
         top++; bottom--;
         left++; right--;
     }
-	return formList(matrix,n,m)
+	return [formList(matrix,n,m),true]
 }
 function getRotatedTable(list){
+	list=JSON.parse(list)
 	return verifyMatrix(list) ? rotateMatrixEdges(list) : [[],false]
 }
 
@@ -96,7 +105,7 @@ const writeStream = fs.createWriteStream(__dirname+outputFile);
 const csvParser = parse.parse({columns: true}, function (err, records) {
 	//rotate each table
 	records.forEach(element => {
-		getRotatedTable(element.json)
+		console.log(getRotatedTable(element.json),'\n');
 	});
 });
 //let writeCsv=fastcsv.write([ ["id","json" ],['3','"[6,7]"' ]],{headers:true}).pipe(writeStream)
