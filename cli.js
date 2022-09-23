@@ -10,8 +10,10 @@ stream.pipe(process.stdout);
 let inputFile="/"+process.argv[2]
 
 function verifyMatrix(matrixList){
+	//square matrix
 	let length=matrixList.length;
  	return length > 0 && Math.sqrt(length) % 1 === 0;
+	//rectangular matrix
 } 
 
 function formMatrix(list){
@@ -98,16 +100,18 @@ function getRotatedTable(list,id){
 }
 
 const csvParser = parse.parse({columns: true}, function (err, records) {
-	stream.write(['id','json','is_valid'])
+})
+
+stream.write(['id','json','is_valid'])
+//process stream one row at time
+fs.createReadStream(__dirname+inputFile).pipe(csvParser).on('data', (element) => {
 	//rotate each table
-	records.forEach(element => {		
-		stream.write(getRotatedTable(element.json,Number(element.id)))
-	});
+	stream.write(getRotatedTable(element.json,Number(element.id)))
 }).on("end",function(){	
 	stream.end();
+}).on('error', err => {
+	console.error(err)
 });
-//process stream in chunk of 128kbs
-fs.createReadStream(__dirname+inputFile,{ highWaterMark: 128 * 1024 }).pipe(csvParser);
 
 
 
