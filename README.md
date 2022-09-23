@@ -9,6 +9,8 @@ OR
 <code>node cli.js inputFileName.csv</code>
 
 **Test cases-**
+Run test cases using
+<code>npm run test</code>
 
 1. Square matrix 
 
