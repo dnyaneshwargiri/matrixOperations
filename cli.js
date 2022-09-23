@@ -10,7 +10,7 @@ stream.pipe(process.stdout);
 let inputFile="/"+process.argv[2]
 
 function getPossibleMatrixDimensions(){
-
+//to-do
 }
 
 function verifyMatrix(matrixList){
