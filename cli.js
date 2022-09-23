@@ -1,10 +1,13 @@
 const process = require('process');
 const fs = require('fs'); 
 const parse = require('csv-parse');
-const fastcsv = require('fast-csv');
+const { format } = require('@fast-csv/format');
+const stream = format({ delimiter: ',' });
 
+if(process.argv.length<3) throw new Error('No input file provided')
+
+stream.pipe(process.stdout);
 let inputFile="/"+process.argv[2]
-let outputFile="/"+process.argv[3]
 
 function verifyMatrix(matrixList){
 	let length=matrixList.length;
@@ -94,19 +97,17 @@ function getRotatedTable(list,id){
 	return verifyMatrix(list) ? [id,'['+rotateMatrixEdges(list)+']',true] : [id,"[]",false]
 }
 
-data=[]
 const csvParser = parse.parse({columns: true}, function (err, records) {
+	stream.write(['id','json','is_valid'])
 	//rotate each table
 	records.forEach(element => {		
-		data.push(getRotatedTable(element.json,Number(element.id)))
+		stream.write(getRotatedTable(element.json,Number(element.id)))
 	});
-}).on("end",function(){
-	data.unshift(["id","json",'is_valid'])
-	const writeStream = fs.createWriteStream(__dirname+outputFile);
-	let writeCsv=fastcsv.write(data,{headers:true}).pipe(writeStream)
+}).on("end",function(){	
+	stream.end();
 });
-
-fs.createReadStream(__dirname+inputFile).pipe(csvParser);
+//process stream in chunk of 128kbs
+fs.createReadStream(__dirname+inputFile,{ highWaterMark: 128 * 1024 }).pipe(csvParser);
 
 
 
