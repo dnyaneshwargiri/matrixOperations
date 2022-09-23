@@ -90,6 +90,8 @@ The time complexity of the above alogorithm is <code>O(N * M)</code>, where N an
 
 **Space Complexity=**
 The Space Complexity of the above approach is <code>O(N + M)</code>, where N and M are the dimensions of the input matrix. It is because we are creating a array to store the elements of the rings and the <code>maximum possible size of a ring < 2 * (N + M)</code>.
+
+	
 **Data Cases-**
 
 1. Square matrix- checking if square root of length of list is whole postive number
