@@ -55,7 +55,7 @@ function buildList(matrix, rowCount, columnCount) {
 }
 
 function rotateMatrixEdges(matrix, rowCount, columnCount, rotateDirection) {
-  const k = 1;
+  const rotationStep = 1;
   let top = 0,
     bottom = rowCount - 1,
     left = 0,
@@ -74,7 +74,7 @@ function rotateMatrixEdges(matrix, rowCount, columnCount, rotateDirection) {
     for (let iterator = bottom - 1; iterator > top; iterator--) {
       elements.push(matrix[iterator][left]);
     }
-    if (elements.length <= k) {
+    if (elements.length <= rotationStep) {
       break;
     }
 
@@ -83,13 +83,13 @@ function rotateMatrixEdges(matrix, rowCount, columnCount, rotateDirection) {
 
     switch (rotateDirection) {
       case "CLOCKWISE":
-        index = size - k;
+        index = size - rotationStep;
         break;
       case "ANTICLOCKWISE":
-        index = k;
+        index = rotationStep;
         break;
       default:
-        index = size - k;
+        index = size - rotationStep;
         break;
     }
 
