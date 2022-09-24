@@ -55,8 +55,13 @@ it("Should rotate a matrix edges correctly clockwise input-1", function () {
     [7, 8, 9],
   ];
   const n = (m = input.length);
-  const result = app.rotateMatrixEdges(input, n, m);
-  const expectedResult = [ [ 4, 1, 2 ], [ 7, 5, 3 ], [ 8, 9, 6 ] ];
+  const rotateDirection="CLOCKWISE"
+  const result = app.rotateMatrixEdges(input, n, m,rotateDirection);
+  const expectedResult = [
+    [4, 1, 2],
+    [7, 5, 3],
+    [8, 9, 6],
+  ];
   expect(result).deep.to.equal(expectedResult);
 });
 
@@ -66,8 +71,29 @@ it("Should rotate a matrix edges correctly clockwise input-2", function () {
     [90, 10],
   ];
   const n = (m = input.length);
-  const result = app.rotateMatrixEdges(input, n, m);
-  const expectedResult = [ [ 90, 40 ], [ 10, 20 ] ];
+  const rotateDirection="CLOCKWISE"
+  const result = app.rotateMatrixEdges(input, n, m,rotateDirection);
+  const expectedResult = [
+    [90, 40],
+    [10, 20],
+  ];
+  expect(result).deep.to.equal(expectedResult);
+});
+
+it("Should rotate a matrix edges correctly anticlockwise input-1", function () {
+  const input = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+  ];
+  const n = (m = input.length);
+  const rotateDirection="ANTICLOCKWISE"
+  const result = app.rotateMatrixEdges(input, n, m,rotateDirection);
+  const expectedResult = [
+    [2, 3, 6],
+    [1, 5, 9],
+    [4, 7, 8],
+  ];
   expect(result).deep.to.equal(expectedResult);
 });
 

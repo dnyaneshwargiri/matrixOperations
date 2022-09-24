@@ -11,6 +11,7 @@ stream.pipe(process.stdout);
 const emptyList = "[]";
 const openingSquare = "[";
 const closingSquare = "]";
+const rotateDirection = "CLOCKWISE";
 
 function isMatrixPossible(table) {
   let rowCount = (columnCount = 0);
@@ -53,7 +54,7 @@ function buildList(matrix, rowCount, columnCount) {
   return tempList;
 }
 
-function rotateMatrixEdges(matrix, rowCount, columnCount) {
+function rotateMatrixEdges(matrix, rowCount, columnCount, rotateDirection) {
   const k = 1;
   let top = 0,
     bottom = rowCount - 1,
@@ -76,8 +77,22 @@ function rotateMatrixEdges(matrix, rowCount, columnCount) {
     if (elements.length <= k) {
       break;
     }
+
     let size = elements.length;
-    let index = size - k;
+    let index;
+
+    switch (rotateDirection) {
+      case "CLOCKWISE":
+        index = size - k;
+        break;
+      case "ANTICLOCKWISE":
+        index = k;
+        break;
+      default:
+        index = size - k;
+        break;
+    }
+
     for (let iterator = left; iterator <= right; iterator++) {
       matrix[top][iterator] = elements[index];
       index++;
@@ -120,7 +135,8 @@ function rotateTable(table, id) {
             rotateMatrixEdges(
               buildMatrix(table, rowCount, columnCount),
               rowCount,
-              columnCount
+              columnCount,
+              rotateDirection
             ),
             rowCount,
             columnCount
