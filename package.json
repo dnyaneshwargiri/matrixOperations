@@ -12,7 +12,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha ./test/cli.test.js --exit"
+    "test": "mocha ./test/cli.test.js"
   },
   "repository": {
     "type": "git",

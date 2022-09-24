@@ -117,7 +117,7 @@ Used readStream to process each row as below.
 <code>
 fs.createReadStream(__dirname+inputFile).pipe(csvParser).on('data', (element) => {
 	//rotate each table
-	stream.write(getRotatedTable(element.json,Number(element.id)))
+	stream.write(rotateTable(element.json,Number(element.id)))
 })
 </code>
 
