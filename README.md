@@ -76,6 +76,38 @@ Run test cases using
 
 
 **Rotation Algorithm**
+1. Start
+
+2. let top=0, bottom=rows-1
+
+3. Traverse the matrix in spiral order i.e
+   left 	=>		right         
+   ||				 ||
+   left 	<=		bottom
+
+   and store it in list namely A.
+
+4. Set k=1 as we have to rotate by 1 step
+
+5. Do
+
+   if lenght(A) <=k break
+
+   let index= length(A)-k   
+   
+   Start assigning values to matrix from list A in below order
+   i. left => right   forEach element do { update index++; index=index% lenght(A)}
+   ii. right => bottom forEach element do { update index++; index=index% lenght(A)}
+   iii. bottom => top  forEach element do { update index++; index=index% lenght(A)}
+
+   update below parameter as 
+   top++
+   bottom--
+   left++
+   right--
+
+6. while top <= bottom repeat step 3 to 5 else break.
+    
 
 
 **Performance handeling-**

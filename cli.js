@@ -3,10 +3,9 @@ const fs = require('fs');
 const parse = require('csv-parse');
 const { format } = require('@fast-csv/format');
 const stream = format({ delimiter: ',' });
+stream.pipe(process.stdout);
 
 if(process.argv.length<3) throw new Error('No input file provided')
-
-stream.pipe(process.stdout);
 let inputFile="/"+process.argv[2]
 
 function getPossibleMatrixDimensions(){
@@ -17,11 +16,18 @@ function verifyMatrix(matrixList){
 	let n=m=0
 	let isValid=false;
 	let length=matrixList.length;
-	//square matrix 
 	isValid=length > 0 && Math.sqrt(length) % 1 === 0;
 	isValid? n=m=Math.sqrt(length): n=m=0;
-	//rectangular matrix= not required as per documnetation
-	return [isValid,n,m]
+	switch(isValid){
+		//square matrix 
+		case true:
+			return [true,n,m]
+		case false:
+			//rectangular matrix= not required as per documnetation
+			return [false,n,m]
+		default:
+			return [false,n,m]
+	}
 } 
 
 function formMatrix(list,n,m){
@@ -48,7 +54,6 @@ function rotateMatrixEdges(list,n,m){
 	let matrix=formMatrix(list,n,m)
 	let k=1
     let top=0, bottom=n-1,left=0,right=m-1;
-    // Rotate while the ring exists.
     while(top<=bottom){
         let elements=[];
         for(let i=left;i<=right;i++){
@@ -66,10 +71,8 @@ function rotateMatrixEdges(list,n,m){
         if(elements.length<=k){
             break;
         }
-        // Rotation starts.
         let size=elements.length;
         let index=size-k;
-        // Store the rotated ring.
         for(let i=left;i<=right;i++){
             matrix[top][i]=elements[index];
             index++; index%=size;

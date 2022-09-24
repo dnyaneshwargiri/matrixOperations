@@ -60,8 +60,28 @@ it('Should get rotated table for a table list',function(){
     expectedResult=[3,"[-5]", true]
     expect(result).deep.to.equal(expectedResult);
 
-    input={id:3,json:"[2, -0]"}
+    input={id:9,json:"[2, -0]"}
     result=app.getRotatedTable(input.json,Number(input.id))
-    expectedResult=[3,"[]", false]
+    expectedResult=[9,"[]", false]
+    expect(result).deep.to.equal(expectedResult);
+
+    input={id:1,json:"[1, 2, 3, 4, 5, 6, 7, 8, 9]"}
+    result=app.getRotatedTable(input.json,Number(input.id))
+    expectedResult=[1,"[4,1,2,7,5,3,8,9,6]",true]
+    expect(result).deep.to.equal(expectedResult);
+
+    input={id:2,json:"[40, 20, 90, 10]"}
+    result=app.getRotatedTable(input.json,Number(input.id))
+    expectedResult=[2,"[90,40,10,20]",true]
+    expect(result).deep.to.equal(expectedResult);
+
+    input={id:5,json:"[2, -5, -5]"}
+    result=app.getRotatedTable(input.json,Number(input.id))
+    expectedResult=[5,"[]",false]
+    expect(result).deep.to.equal(expectedResult);
+
+    input={id:8,json:"[1, 1, 1, 1, 1]"}
+    result=app.getRotatedTable(input.json,Number(input.id))
+    expectedResult=[8,"[]",false]
     expect(result).deep.to.equal(expectedResult);
 });
